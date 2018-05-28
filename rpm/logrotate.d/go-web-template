@@ -1,0 +1,17 @@
+/var/log/go-web-template/*.log {
+    daily
+    missingok
+    rotate 30
+    notifempty
+    sharedscripts
+    compress
+    delaycompress
+    dateext
+    dateformat -%d%m%Y
+    postrotate
+        maintenance
+        sleep 45
+        /sbin/service go-web-template restart > /dev/null 2>/dev/null || true
+        operational
+    endscript
+}

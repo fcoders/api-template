@@ -1,0 +1,25 @@
+app:
+  debug: yes
+  http_port: 7177
+  log_level: 2
+
+database:
+  main:
+    address: 127.0.0.1:3306
+    username: astropay
+    password: astropay
+    max_open_connections: 5
+    max_idle_connections: 1
+    max_lifetime: 300
+
+slack:
+  enabled: yes
+  webhook_url: https://hooks.slack.com/services/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
+
+proxy:
+  enabled: no
+  address: http://127.0.0.1:8080
+
+new_relic:
+  enabled: no
+  license_key: 0000000000111111111122222222223333333333
