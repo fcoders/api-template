@@ -37,6 +37,7 @@ func (service *HTTPService) Init() {
 
 	engine := gin.New()
 	engine.Use(gin.Recovery())
+	engine.Use(gin.Logger())
 
 	// enable New relic
 	if settings.Get().NewRelic.Enabled {

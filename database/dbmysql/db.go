@@ -35,7 +35,6 @@ func (access *MySQLAccess) Init(logger logger.Logger, dbName string, params ...i
 		pwd := params[2].(string)
 
 		connString := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=True", user, pwd, server, dbName)
-		fmt.Println(connString)
 		access.db, err = gorm.Open("mysql", connString)
 		access.db.SetLogger(logger)
 		// access.db.LogMode(debug)
