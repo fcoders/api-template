@@ -1,16 +1,15 @@
 package main
 
 import (
-	"astropay/go-web-template/logger"
-	"astropay/go-web-template/routes"
-	"astropay/go-web-template/services"
-	"astropay/go-web-template/settings"
 	"fmt"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/fcoders/api-template/routes"
+	"github.com/fcoders/api-template/services"
+	"github.com/fcoders/api-template/settings"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,12 +38,6 @@ func (service *HTTPService) Init() {
 	engine.Use(gin.Recovery())
 	engine.Use(gin.Logger())
 
-	// enable New relic
-	if settings.Get().NewRelic.Enabled {
-		settings.StartNewRelicAgent()
-		engine.Use(settings.NewRelicMiddleware())
-	}
-
 	// set gin router engine
 	service.engine = engine
 }
@@ -65,14 +58,14 @@ func (service *HTTPService) Start() {
 	go server.ListenAndServe()
 	service.waitGroup.Add(1)
 
-	log := logger.GetLogger()
+	log := services.DefaultLogger()
 	log.Infof("%s service started!", settings.AppName)
 	log.Infof("Version %s commit %s", settings.Version, settings.CommitHash)
 }
 
 // Stop ends the HTTP service execution and release all the resources
 func (service *HTTPService) Stop(cause string) {
-	log := logger.GetLogger()
+	log := services.DefaultLogger()
 	log.Infof("Shutdown requested with signal '%s'", strings.ToUpper(cause))
 
 	// releases...

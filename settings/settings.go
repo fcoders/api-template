@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/astropay/go-tools/files"
+	"github.com/fcoders/api-template/common"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
@@ -20,8 +20,16 @@ type Settings struct {
 		HTTPPort int  `yaml:"http_port"`
 		LogLevel int  `yaml:"log_level"`
 	} `yaml:"app"`
+	Log struct {
+		Location     string `yaml:"location"`
+		Console      bool   `yaml:"console"`
+		Syslog       bool   `yaml:"syslog"`
+		SlackEnabled bool   `yaml:"slack_enabled"`
+		SlackWebhook string `yaml:"slack_webhook"`
+	} `yaml:"log"`
 	Database struct {
 		Main struct {
+			Name               string `yaml:"name"`
 			Address            string `yaml:"address"`
 			Username           string `yaml:"username"`
 			Password           string `yaml:"password"`
@@ -30,14 +38,6 @@ type Settings struct {
 			MaxLifetime        int    `yaml:"max_lifetime"`
 		} `yaml:"main"`
 	} `yaml:"database"`
-	NewRelic struct {
-		Enabled    bool   `yaml:"enabled"`
-		LicenseKey string `yaml:"license_key"`
-	} `yaml:"new_relic"`
-	Slack struct {
-		Enabled    bool   `yaml:"enabled"`
-		WebhookURL string `yaml:"webhook_url"`
-	} `yaml:"slack"`
 	Proxy struct {
 		Enabled bool   `yaml:"enabled"`
 		Address string `yaml:"address"`
@@ -48,7 +48,7 @@ var cfg *Settings
 
 // Init loads application settings in the indicated file
 func Init(file string) (err error) {
-	if files.Exists(file) {
+	if common.Exists(file) {
 		err = loadSettingsFromFile(file)
 	} else {
 		return errors.Errorf("File '%s' not found", file)

@@ -1,15 +1,15 @@
 package main
 
 import (
-	"astropay/go-web-template/logger"
-	"astropay/go-web-template/services"
-	"astropay/go-web-template/settings"
 	"flag"
-	"log"
+	"fmt"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
+
+	"github.com/fcoders/api-template/services"
+	"github.com/fcoders/api-template/settings"
 )
 
 var (
@@ -26,25 +26,24 @@ func main() {
 // application start
 func appInit() {
 
+	// load settings
+	if err := settings.Init(*settingsFile); err != nil {
+		panic(err)
+	}
+
 	// dependency manager
 	err := services.Init()
 	if err != nil {
-		log.Panicf("Error initiation dependency manager: %s", err.Error())
+		panic(fmt.Sprintf("Error initiation dependency manager: %s", err.Error()))
 	}
 
-	log := services.DefaultLogger()
-
-	// load settings
-	if err := settings.Init(*settingsFile); err != nil {
-		log.Fatal(err)
-	}
-
-	// configure log level
-	logger.SetLogLevel(settings.Get().App.LogLevel)
+	// configure logger
+	services.DefaultLogger().EnableErrorsToSlack(settings.Get().Log.SlackEnabled)
+	services.DefaultLogger().SetSlackWeebhook(settings.Get().Log.SlackWebhook)
 
 	// init db connection
 	if err := initDatabase(); err != nil {
-		log.Fatal(err)
+		services.DefaultLogger().Fatal(err)
 	}
 }
 
@@ -98,7 +97,7 @@ func initDatabase() (err error) {
 	// main database
 	err = services.DefaultDB().Init(
 		services.DefaultLogger(),
-		"apc", // user the desired DB
+		settings.Get().Database.Main.Name,
 		settings.Get().Database.Main.Address,
 		settings.Get().Database.Main.Username,
 		settings.Get().Database.Main.Password,

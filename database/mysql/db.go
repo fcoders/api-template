@@ -1,12 +1,12 @@
-package dbmysql
+package mysql
 
 import (
-	"astropay/go-web-template/database"
-	"astropay/go-web-template/logger"
 	"database/sql"
 	"fmt"
 	"time"
 
+	"github.com/fcoders/api-template/database"
+	"github.com/fcoders/logger"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -23,7 +23,7 @@ type MySQLAccess struct {
 // - user (type string)
 // - password (type string)
 //
-func (access *MySQLAccess) Init(logger logger.Logger, dbName string, params ...interface{}) (err error) {
+func (access *MySQLAccess) Init(log *logger.Logger, dbName string, params ...interface{}) (err error) {
 	if access != nil {
 
 		if len(params) < 3 {
@@ -36,7 +36,7 @@ func (access *MySQLAccess) Init(logger logger.Logger, dbName string, params ...i
 
 		connString := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=True", user, pwd, server, dbName)
 		access.db, err = gorm.Open("mysql", connString)
-		access.db.SetLogger(logger)
+		access.db.SetLogger(log)
 		// access.db.LogMode(debug)
 	}
 

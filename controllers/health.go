@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"astropay/go-web-template/settings"
 	"encoding/json"
 	"net/http"
 
-	"github.com/astropay/go-tools/files"
+	"github.com/fcoders/api-template/common"
+	"github.com/fcoders/api-template/settings"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +20,7 @@ type appStatus struct {
 func Health() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		responseCode := http.StatusOK
-		if files.Exists("/etc/app-mode/maintenance") {
+		if common.Exists("/etc/app-mode/maintenance") {
 			responseCode = http.StatusFound
 		}
 

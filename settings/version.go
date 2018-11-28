@@ -1,6 +1,6 @@
 package settings
 
-const AppName = "Go Web Template"
+const AppName = "API Template"
 
 // Version tags
 var (

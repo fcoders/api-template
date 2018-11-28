@@ -1,11 +1,11 @@
 package database
 
 import (
-	"astropay/go-web-template/logger"
 	"database/sql"
 	"errors"
 	"time"
 
+	"github.com/fcoders/logger"
 	"github.com/jinzhu/gorm"
 )
 
@@ -15,7 +15,7 @@ var (
 )
 
 type DBAccessInterface interface {
-	Init(logger logger.Logger, dbName string, params ...interface{}) error
+	Init(log *logger.Logger, dbName string, params ...interface{}) error
 	Get() (gdb *gorm.DB)
 	DB() (db *sql.DB)
 	Close() error
@@ -31,9 +31,9 @@ func SetDBAccess(dba DBAccessInterface) {
 	dbaImpl = dba
 }
 
-func Init(logger logger.Logger, dbName string, params ...interface{}) (err error) {
+func Init(log *logger.Logger, dbName string, params ...interface{}) (err error) {
 	if dbaImpl != nil {
-		return dbaImpl.Init(logger, dbName, params)
+		return dbaImpl.Init(log, dbName, params)
 	}
 
 	return

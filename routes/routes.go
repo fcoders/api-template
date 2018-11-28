@@ -1,8 +1,7 @@
 package routes
 
 import (
-	"astropay/go-web-template/controllers"
-
+	"github.com/fcoders/api-template/controllers"
 	"github.com/gin-gonic/gin"
 )
 
